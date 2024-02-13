@@ -1,51 +1,28 @@
-// import 'package:flutter/material.dart';
-
-// void main() {
-//   runApp(Dice());
-// }
-
-// class Dice extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//         home: Scaffold(
-//       backgroundColor: Colors.red,
-//       body: Column(
-//         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//         children: [
-//           const Text(
-//             "Dicee App",
-//             style: TextStyle(
-//               fontSize: 30,
-//               fontWeight: FontWeight.bold,
-//               color: Colors.white,
-//             ),
-//           ),
-//           Row(
-//             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//             children: [
-//               Image.asset('images/dice1.png'),
-//               Image.asset('images/dice6.png'),
-//             ],
-//           ),
-//         ],
-//       ),
-//     ));
-//   }
-// }
-
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(Dice());
+  runApp(DiceApp());
 }
 
-class Dice extends StatelessWidget {
+class DiceApp extends StatefulWidget {
+  @override
+  State<DiceApp> createState() => _DiceAppState();
+}
+
+class _DiceAppState extends State<DiceApp> {
+  int diceNumber1 = 1;
+  int diceNumber2 = 2;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
+        home: GestureDetector(
+      onTap: () {
+        genRandomNumber();
+        print("Screen Tapped");
+      },
+      child: Scaffold(
         backgroundColor: Colors.red,
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -58,65 +35,28 @@ class Dice extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            RandomImagePair(), // Adding RandomImagePair widget here
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Image.asset('images/dice$diceNumber1.png'),
+                Image.asset('images/dice$diceNumber2.png'),
+              ],
+            ),
           ],
         ),
       ),
-    );
-  }
-}
-
-class RandomImagePair extends StatefulWidget {
-  @override
-  _RandomImagePairState createState() => _RandomImagePairState();
-}
-
-class _RandomImagePairState extends State<RandomImagePair> {
-  List<String> images = [
-    'images/dice1.png',
-    'images/dice2.png',
-    'images/dice3.png',
-    'images/dice4.png',
-    'images/dice5.png',
-    'images/dice6.png',
-  ];
-  List<String> selectedImages = [];
-
-  void generateRandomPair() {
-    // Clear the previous selected images
-    selectedImages.clear();
-
-    // Shuffle the list of images
-    images.shuffle();
-
-    // Select the first two images from the shuffled list
-    selectedImages.addAll(images.take(2));
-
-    setState(() {});
+    ));
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        if (selectedImages.isNotEmpty)
-          Image.asset(
-            selectedImages[0],
-            width: 100,
-            height: 100,
-          ),
-        if (selectedImages.isNotEmpty)
-          Image.asset(
-            selectedImages[1],
-            width: 100,
-            height: 100,
-          ),
-        ElevatedButton(
-          onPressed: generateRandomPair,
-          child: Text('Generate Random Pair'),
-        ),
-      ],
-    );
+  void genRandomNumber() async {
+    Random random = Random();
+    for (int i = 0; i < 15; i++) {
+      await Future.delayed(const Duration(milliseconds: 100), () {
+        diceNumber1 = random.nextInt(6) + 1;
+        diceNumber2 = random.nextInt(6) + 1;
+        setState(() {});
+      });
+    }
+    ;
   }
 }
